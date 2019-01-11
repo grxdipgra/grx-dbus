@@ -1,5 +1,5 @@
 [Unit]
-Description=Este servicio lo usamos para realizar llamadas al sistema desde konekta
+Description=Este servicio lo usamos para realizar llamadas al sistema 
 
 [Service]
 Type=dbus
