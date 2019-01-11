@@ -1,0 +1,10 @@
+Package: grx-dbus
+Priority: standard
+Section: grx
+Maintainer: Diputación Provincial de Granada, Oficina de Software Libre <osl@dipgra.es>
+Architecture: amd64
+Version: 2019.01.11
+Depends:sqlite3,libpcap0.8, grx-database, grx-iptables
+Provide:arp-scan
+Homepage: https://incidencias.dipgra.es/
+Description: Paquete de configuracion de red en Mulhacen

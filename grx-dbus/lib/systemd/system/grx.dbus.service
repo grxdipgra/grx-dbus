@@ -1,0 +1,18 @@
+[Unit]
+Description=Este servicio lo usamos para realizar llamadas al sistema desde konekta
+
+[Service]
+Type=dbus
+BusName=grx.dbus
+ExecStart=/usr/sbin/grx.dbus.service
+RemainAfterExit=yes
+Restart=always
+RestartSec=10
+StartLimitBurst=5
+StartLimitInterval=600
+KillMode=process
+
+[Install]
+Alias=grx.service
+WantedBy=multi-user.target
+

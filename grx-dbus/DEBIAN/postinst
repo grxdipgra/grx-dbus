@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+LOG=/var/log/grx/grx-dbus.log
+
+
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
+	deb-systemd-helper unmask 'grx.dbus.service' >/dev/null || true
+
+	if deb-systemd-helper --quiet was-enabled 'grx.dbus.service'; then
+		deb-systemd-helper enable 'grx.dbus.service' >/dev/null || true
+	else
+		deb-systemd-helper update-state 'grx.dbus.service' >/dev/null || true
+	fi
+	if [ -d /run/systemd/system ]; then
+		systemctl --system daemon-reload >/dev/null || true
+		if [ -n "$2" ]; then
+			_dh_action=restart
+		else
+			_dh_action=start
+		fi
+		deb-systemd-invoke $_dh_action 'grx.dbus.service' >/dev/null || true
+	fi
+fi
+if [ "$1" = "configure" ] ; then 
+   	ldconfig
+    echo "El paquete grx-dbus se ha instalado correctamente en el sistema" >>$LOG
+fi

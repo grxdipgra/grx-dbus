@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+LOG=/var/log/grx/grx-dbus.log
+
+if [ -d /run/systemd/system ]; then
+	systemctl --system daemon-reload >/dev/null || true
+fi
+if [ "$1" = "remove" ]; then
+   	ldconfig
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper mask 'grx.dbus.service' >/dev/null || true
+	    echo "El paquete grx-dbus se ha desinstalado del sistema" >> $LOG
+    fi
+fi
+
+if [ "$1" = "purge" ]; then
+	if [ -x "/usr/bin/deb-systemd-helper" ]; then
+		deb-systemd-helper purge 'grx.dbus.service' >/dev/null || true
+		deb-systemd-helper unmask 'grx.dbus.service' >/dev/null || true
+	fi
+fi
+
+
