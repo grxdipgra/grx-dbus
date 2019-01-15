@@ -79,6 +79,7 @@ private:
 
 private slots:
  void carga_variables();
+ void cambioRed();
 
 };
 

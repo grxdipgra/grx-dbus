@@ -82,7 +82,13 @@ GrxDbus_system::GrxDbus_system()//CONSTRUCTOR
         }
     QDBusConnection::systemBus().registerObject("/", this, QDBusConnection::ExportAllSlots);
     QDBusConnection::systemBus().registerObject("/senales", this,QDBusConnection::ExportAllSignals);
+
+    if (!QDBusConnection::systemBus().connect("org.freedesktop.NetworkManager","","org.freedesktop.NetworkManager.Connection.Active","StateChanged",this,SLOT(cambioRed()))){
+                fprintf(stderr, "No puedo conectarme al bus de sistema desde grx-session.\n");
+    }
+
     this->temporizador();
+
 }
 
 GrxDbus_system::~GrxDbus_system(){
@@ -94,7 +100,6 @@ QString GrxDbus_system::crea_conexion (const QString &conexion)
 {
    return conexion;
 }
-
 
 void GrxDbus_system::carga_variables(){
 
@@ -292,6 +297,13 @@ bool GrxDbus_system::esta_nodo_por_nombre(const QString &nodo)
     }
 }
 
+void GrxDbus_system::cambioRed(){ //Se ejecuta cuando hay un cambio en la configuracion de la red
+    esta_repositorio();
+    esta_veleta();
+    esta_mysqlDB();
+}
+
+
 bool GrxDbus_system::esta_repositorio(){
     QProcess process;
     process.start("ping -c1 -w1 "+QString(repositorio));
@@ -302,15 +314,7 @@ bool GrxDbus_system::esta_repositorio(){
         QDBusConnection::systemBus().send(message);
 
     }
-    /*else
-    {
-        QDBusMessage message = QDBusMessage::createSignal("/",SERVICE_NAME, "esta_repositorio");
-        message << false;
-        QDBusConnection::systemBus().send(message);
-
-    }*/
-
-    return !process.exitCode();
+return !process.exitCode();
 }
 
 bool GrxDbus_system::esta_veleta(){
@@ -381,6 +385,7 @@ bool GrxDbus_system::iptables_borrar_excepcion(const QString &excepcion){
     }
 return 0;
 }
+
 QList<QVariant> GrxDbus_system::iptables_listar_excepciones(){
 
    QSqlQuery consultar;
@@ -396,12 +401,6 @@ QList<QVariant> GrxDbus_system::iptables_listar_excepciones(){
 
 return vector;
 }
-
-
-
-
-
-
 
 bool GrxDbus_system::iptables_parar(){
     QProcess process;

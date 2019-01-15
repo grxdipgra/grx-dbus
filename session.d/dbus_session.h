@@ -34,6 +34,7 @@ signals:
     void copias_seguridad(const QString &);
 
 private slots:
+
     void activaProxy();
     void onProxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *auth);
     void replyFinished(QNetworkReply*);

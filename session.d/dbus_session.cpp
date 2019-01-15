@@ -24,7 +24,8 @@ GrxDbus_session::GrxDbus_session()//CONSTRUCTOR
     if (!QDBusConnection::systemBus().isConnected()) {
             fprintf(stderr, "No puedo conectarme al bus del sistema.\n");
             qApp->exit();
-    } else
+    } else //Aqui hacemos las conexiones a todas las señales que queramos
+
         if (!QDBusConnection::systemBus().connect(SERVICE_NAME,"","grx.dbus","esta_veleta",this,SLOT(copias()))){
             fprintf(stderr, "No puedo conectarme al bus de sistema desde grx-session.\n");
         }
